@@ -17,13 +17,14 @@ def parseNodes(nodes):
     retval = []
     for node in nodes:
         retval_item = {}
-        for child in node.getchildren():
-            name = child.tag
-            if child.getchildren():
-                retval_item[name] = parseNodes([child])
-            else:
-                retval_item[name] = node.findtext(".//%s" % child.tag)
-        retval.append(retval_item)
+        if "getchildren" in dir(node):
+            for child in node.getchildren():
+                name = child.tag
+                if "getchildren" in dir(child) and child.getchildren():
+                    retval_item[name] = parseNodes([child])
+                else:
+                    retval_item[name] = node.findtext(".//%s" % child.tag)
+            retval.append(retval_item)
     return retval
 
 def stripNameSpace(xml):

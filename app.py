@@ -111,6 +111,7 @@ def putcors():
 
 @app.route("/getservice", methods = ['POST'])
 def listbucketsurl():
+  print("DEBUGGING")
   url = from_request(request, 'url')
   s3auth = from_request(request, 's3auth')
   date = from_request(request, 'date')
@@ -120,18 +121,23 @@ def listbucketsurl():
   r = requests.get(url, headers=headers)
 
   statuscode = r.status_code
-
+  print(statuscode)
   if statuscode != 200:
      if statuscode == 403:
         resp = Response(response='Access Denied', status=statuscode)
      else:
         resp = Response(response='Unknown Error', status=500)
      return resp
+  print("SUCCESS REQUEST!!---r---")
 
-  content = r.text
-
+  print(r)
+  content = r.text  
   buckets = xmlparser.getListFromXml(content, 'Bucket')
+  print("BUCKETS: ")
+  print(buckets)
   resp = Response(response=json.dumps(buckets), status=statuscode)
+  print("JSON: ")
+  print(resp)
   resp.headers['Content-type'] = 'application/json; charset=UTF-8'
   return resp
 

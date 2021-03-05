@@ -1,11 +1,10 @@
-FROM centos:7.2.1511
+FROM fedora:latest
 
 WORKDIR /sree
 COPY ["static", "/sree/static"]
 COPY ["xmlparser.py", "app.py", "/sree/"]
+COPY ["requirements.txt", "requirements.txt", "/sree/"]
 
-RUN yum install -y epel-release
-RUN yum install -y python2-pip
-RUN pip install flask requests
+RUN yum install -y wget curl && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && /bin/python3 get-pip.py && pip install -r /sree/requirements.txt
 
-ENTRYPOINT ["python", "/sree/app.py"]
+ENTRYPOINT ["/bin/python3", "/sree/app.py"]
